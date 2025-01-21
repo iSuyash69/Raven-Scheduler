@@ -198,11 +198,11 @@ const autoFetch=async()=>{
 
 autoFetch();
 
-setInterval(autoFetch,1000*60*60*6);
+setInterval(autoFetch,1000*60*60);
 
 // Start the server
 app.listen(3000,()=>{
-    console.log("Server is running on http://localhost:3000");
+    console.log("Server is running on render.com");
 });
 
 
