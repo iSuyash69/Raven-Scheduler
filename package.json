@@ -1,0 +1,16 @@
+{
+  "name": "raven-scheduler",
+  "version": "1.0.0",
+  "description": "class schedule notification automation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "resend": "^4.1.1"
+  }
+}
