@@ -92,23 +92,38 @@ const getSchedule=async(syncToken=null)=>{
 
 
 // Route to manually trigger schedule fetch (optional)
-app.get('/fetch-schedule',async(req,res)=>{
+app.get('/fetch-schedule', async (req, res) => {
     
-    const syncToken=getSyncToken();
-    const schedule=await getSchedule(syncToken);
+    try {
+        const syncToken = getSyncToken();
+        const schedule = await getSchedule(syncToken);
 
-    if(schedule.length>0){
-        
-        res.status(200).json({message:'Fetched schedule successfully',schedule});
+        if (schedule.length > 0) {
+            const message = `Class schedule updated!\nYour next class is: ${schedule[0].summary} on ${new Date(schedule[0].start.dateTime).toLocaleString()}\nCheck the entire schedule at: {${TIME_URL}}.`;
 
-        const message=`class schedule updated!\n Your next class is : ${schedule[0].summary} on ${new Date(schedule[0].start.dateTime).toLocaleString()}\n Check the entire schedule at : {${TIME_URL}}.`;
-        await sendEmail(message);
-    
+            try {
+                await sendEmail(message);
+            }
+            catch (emailError) {
+                console.error('Failed to send email:', emailError);
+                res.status(200).json({
+                    message: 'Fetched schedule successfully, but failed to send email',
+                    error: emailError.message,
+                    schedule,
+                });
+                return; 
+            }
+
+            res.status(200).json({ message: 'fetched and mailed successfully', schedule });
+        } 
+        else {
+            res.status(200).json({ message: 'No new classes scheduled' });
+        }
+    } 
+    catch (error) {
+        console.error('Error fetching schedule:', error);
+        res.status(500).json({ message: 'Error fetching schedule', error: error.message });
     }
-    else{
-        res.status(200).json({message:'No new classes scheduled'});
-    }
-
 });
 
 
