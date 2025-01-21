@@ -198,7 +198,7 @@ const autoFetch=async()=>{
 
 autoFetch();
 
-setInterval(autoFetch,1000*60*60);
+setInterval(autoFetch,1000*60*10);
 
 // Start the server
 app.listen(3000,()=>{
